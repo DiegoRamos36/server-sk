@@ -10,78 +10,18 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model User {
-  id                Int      @id @default(autoincrement())
-  username          String   @unique
-  password          String
-  email             String   @unique
-  NdePedidos        Int      @default(0)
-  pedidos           Pedido[]
-  carteira          String?
-  enderecos          Enderecos[]
-  numero            Int?
-  complemento       String?
-  pontoDeReferencia String?  @map("ponto_de_referencia")
-  cupons            Cupom[]
-  @@map("usuarios")
-}
-
-model Pedido {
-  id            Int             @id @default(autoincrement())
-  sessionId     String
-  amountTotal   Int
-  currency      String
-  payment_status String @default("EM ANÁLISE")
-  coupon        String?
-  createdAt     DateTime        @default(now())
-  produtos      PedidoProduto[] @relation("PedidoProdutos") // Relação com PedidoProduto
-  User          User?           @relation(fields: [userId], references: [id])
-  userId        Int?
-}
 
 model Produto {
-  id        Int             @id @default(autoincrement())
-  name      String
-  desc String @default("")
-  price     Float
-  imgSrc    String
-  imgAlt    String
-  createdAt DateTime        @default(now())
-  pedidos   PedidoProduto[] @relation("ProdutoPedidos") // Relação com PedidoProduto
+  id            Int             @id @default(autoincrement())
+  createdAt     String        
+  quantity Int
+  sent String
+  localImg String
+  localDesc String
 }
 
-model PedidoProduto {
-  id        Int @id @default(autoincrement())
-  pedidoId  Int
-  produtoId Int
-  quantity  Int
 
-  pedido  Pedido  @relation("PedidoProdutos", fields: [pedidoId], references: [id])
-  produto Produto @relation("ProdutoPedidos", fields: [produtoId], references: [id])
-}
 
-model Cupom {
-  id            Int      @id @default(autoincrement())
-  codigo        String
-  quantidade    Int
-  dataExpedicao DateTime @default(now())
-  userId        Int
-  user          User     @relation(fields: [userId], references: [id])
-
-  @@map("cupons")
-}
-
-model Enderecos {
-  id Int @id @default(autoincrement())
-  nome String
-  address String
-  bairro String
-  numero String
-  reference String
-  userId Int
-  padrao Boolean @default(false)
-    user      User @relation(fields: [userId], references: [id])
-}
 
 model Funcionarios {
   id Int @id @default(autoincrement())
