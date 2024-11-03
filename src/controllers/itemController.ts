@@ -1,27 +1,29 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { itemSchema } from '../models/itemModel';
+import { productSchema } from '../models/itemModel';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 type ItemBody = {
   name: string;
-  desc: string;
-  imgSrc: string;
-  imgAlt: string;
-  price: number;
+  quantity: number;
+  sent: string;
+  localImg: string;
+  localDesc: string;
 };
 
 export const newItem = async (req: FastifyRequest, res: FastifyReply) => {
-  const data = itemSchema.parse(req.body);
+  const data = productSchema.parse(req.body);
 
   const item = await prisma.produto.create({
     data: {
       name: data.name,
-      desc: data.desc || undefined,
-      price: data.price,
-      imgSrc: data.imgSrc,
-      imgAlt: data.imgAlt,
+      createdAt: data.createdAt,
+      localDesc: data.localDesc,
+      localImg: data.localImg,
+      quantity: data.quantity,
+      sentBy: data.sentBy,
+      expires: data.expires,
     },
   });
   return res.status(201).send({ itemId: item.id });
@@ -29,15 +31,15 @@ export const newItem = async (req: FastifyRequest, res: FastifyReply) => {
 
 // ver todos os itens
 export const getAllItems = async (req: FastifyRequest, res: FastifyReply) => {
-  const menuItems = await prisma.produto.findMany();
-  return menuItems;
+  const stock = await prisma.produto.findMany();
+  return stock;
 };
 
 // ver item por nome
 export const getItemByName = async (req: FastifyRequest, res: FastifyReply) => {
   const { name } = req.body as { name: string };
 
-  const menuItem = await prisma.produto.findFirst({
+  const item = await prisma.produto.findFirst({
     where: {
       name: {
         contains: name,
@@ -45,7 +47,7 @@ export const getItemByName = async (req: FastifyRequest, res: FastifyReply) => {
     },
   });
 
-  return res.send(menuItem);
+  return res.send(item);
 };
 
 // excluir item por id
@@ -64,15 +66,19 @@ export const deleteItemById = async (
 // editar item
 export const editItemById = async (req: FastifyRequest, res: FastifyReply) => {
   const { id } = req.params as { id: string };
-  const { name, desc, price } = req.body as {
+  const { name, quantity, sent, localDesc, localImg } = req.body as {
     name: string;
-    desc: string;
-    price: number;
+    quantity: number;
+    sent: string;
+    localImg: string;
+    localDesc: string;
   };
   const itemAtualizado: Partial<ItemBody> = {};
   if (name !== undefined) itemAtualizado.name = name;
-  if (desc !== undefined) itemAtualizado.desc = desc;
-  if (price !== undefined) itemAtualizado.price = price;
+  if (sent !== undefined) itemAtualizado.sent = sent;
+  if (quantity !== undefined) itemAtualizado.quantity = quantity;
+  if (localImg !== undefined) itemAtualizado.localImg = localImg;
+  if (localDesc !== undefined) itemAtualizado.localDesc = localDesc;
 
   const atualizarItem = await prisma.produto.update({
     where: {

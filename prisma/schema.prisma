@@ -13,9 +13,11 @@ datasource db {
 
 model Produto {
   id            Int             @id @default(autoincrement())
+  name String
   createdAt     String        
   quantity Int
-  sent String
+  expires String
+  sentBy String
   localImg String
   localDesc String
 }
