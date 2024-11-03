@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 import { EmployeeRoutes } from './routes/employeeRoutes';
 
 dotenv.config();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 10000;
 const app = fastify();
 app.register(fastifyJwt, {
   secret: process.env.JWT_KEY || '',
