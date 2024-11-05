@@ -8,19 +8,21 @@ type ItemBody = {
   name: string;
   quantity: number;
   sent: string;
-  localImg: string;
+  localImg: Buffer;
   localDesc: string;
 };
 
 export const newItem = async (req: FastifyRequest, res: FastifyReply) => {
   const data = productSchema.parse(req.body);
 
+  const photoBuffer = Buffer.from(data.localImg, 'base64');
+
   const item = await prisma.produto.create({
     data: {
       name: data.name,
       createdAt: data.createdAt,
       localDesc: data.localDesc,
-      localImg: data.localImg,
+      localImg: photoBuffer,
       quantity: data.quantity,
       sentBy: data.sentBy,
       expires: data.expires,
@@ -74,10 +76,14 @@ export const editItemById = async (req: FastifyRequest, res: FastifyReply) => {
     localDesc: string;
   };
   const itemAtualizado: Partial<ItemBody> = {};
+
   if (name !== undefined) itemAtualizado.name = name;
   if (sent !== undefined) itemAtualizado.sent = sent;
   if (quantity !== undefined) itemAtualizado.quantity = quantity;
-  if (localImg !== undefined) itemAtualizado.localImg = localImg;
+  if (localImg !== undefined) {
+    const photoBuffer = Buffer.from(localImg, 'base64');
+    itemAtualizado.localImg = photoBuffer;
+  }
   if (localDesc !== undefined) itemAtualizado.localDesc = localDesc;
 
   const atualizarItem = await prisma.produto.update({
