@@ -1,5 +1,9 @@
-import { User } from '@prisma/client';
+import { Funcionarios } from '@prisma/client';
 
-export const generateToken = (jwt: any, user: User) => {
-  return jwt.sign({ id: user.id, email: user.email, name: user.username });
+export const generateToken = (jwt: any, funcionarios: Funcionarios) => {
+  return jwt.sign({
+    id: funcionarios.id,
+    cargo: funcionarios.cargo,
+    name: funcionarios.nome,
+  });
 };
