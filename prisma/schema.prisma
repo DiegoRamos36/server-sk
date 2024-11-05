@@ -18,7 +18,7 @@ model Produto {
   quantity Int
   expires String
   sentBy String
-  localImg Bytes
+  localImg String
   localDesc String
 }
 
