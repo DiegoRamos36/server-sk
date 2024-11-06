@@ -1,4 +1,4 @@
-import fastify from 'fastify';
+import fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import { ItemRoutes } from './routes/itemRoutes';
 import fastifyCors from '@fastify/cors';
 import { authCors } from './utilities/authCors';
@@ -21,7 +21,7 @@ app.register(ItemRoutes);
 app.register(EmployeeRoutes);
 app.register(fastifyCors, authCors);
 
-export default async function (req, res) {
+export default async function (req: FastifyRequest, res: FastifyReply) {
   await app.ready();
-  return app.server(req, res); // Usando o método do Fastify para lidar com a request e response
+  return app.server.emit('request', req, res);
 }
