@@ -10,7 +10,7 @@ dotenv.config();
 const port = process.env.PORT || 4000;
 const app = fastify({
   bodyLimit: 5 * 1024 * 1024,
-  disableRequestLogging: true,
+  disableRequestLogging: true, logger: true
 });
 app.register(fastifyJwt, {
   secret: process.env.JWT_KEY || '',
