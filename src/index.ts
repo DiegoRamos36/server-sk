@@ -10,7 +10,8 @@ dotenv.config();
 const port = process.env.PORT || 4000;
 const app = fastify({
   bodyLimit: 5 * 1024 * 1024,
-  disableRequestLogging: true, logger: true
+  disableRequestLogging: true,
+  logger: true,
 });
 app.register(fastifyJwt, {
   secret: process.env.JWT_KEY || '',
@@ -20,6 +21,7 @@ app.register(ItemRoutes);
 app.register(EmployeeRoutes);
 app.register(fastifyCors, authCors);
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
+export default async function (req, res) {
+  await app.ready();
+  return app.server(req, res); // Usando o método do Fastify para lidar com a request e response
+}
