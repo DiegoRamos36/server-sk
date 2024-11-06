@@ -21,7 +21,6 @@ app.register(ItemRoutes);
 app.register(EmployeeRoutes);
 app.register(fastifyCors, authCors);
 
-export default async function (req: FastifyRequest, res: FastifyReply) {
-  await app.ready();
-  return app.server.emit('request', req, res);
-}
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Servidor rodando na porta ${port}`);
+});
