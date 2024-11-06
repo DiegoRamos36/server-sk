@@ -1,14 +1,3 @@
-POST https://server-sk-roda.onrender.com/novo-item
-Content-Type: application/json
-
-{
-  "name" : "Arroz",
-  "quantity" : 1,
-  "createdAt" : "04/11/2024",
-  "expires" : "23/11/2024",
-  "sentBy" : "Admin",
-  "localImg" : ";-;",
-  "localDesc" : "Perto do arco iris"
-}
+GET https://server-sk-alpha.vercel.app/obter-todos-funcionarios
 
 
