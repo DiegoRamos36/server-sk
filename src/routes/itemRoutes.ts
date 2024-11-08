@@ -4,7 +4,9 @@ import {
   editItemById,
   getAllItems,
   getItemByName,
+  minusItemById,
   newItem,
+  plusItemById,
 } from '../controllers/itemController';
 
 export const ItemRoutes: FastifyPluginCallback = (app, options, done) => {
@@ -13,5 +15,7 @@ export const ItemRoutes: FastifyPluginCallback = (app, options, done) => {
   app.post('/obter-item-name', getItemByName);
   app.post('/delete-item', deleteItemById);
   app.post('/edit-item', editItemById);
+  app.post('/plus-item', plusItemById);
+  app.post('/minus-item', minusItemById);
   done();
 };

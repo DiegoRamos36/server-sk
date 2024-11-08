@@ -90,3 +90,40 @@ export const editItemById = async (req: FastifyRequest, res: FastifyReply) => {
 
   return res.send(atualizarItem);
 };
+
+// aumentar quantidade por id
+export const plusItemById = async (req: FastifyRequest, res: FastifyReply) => {
+  const { id, quantity } = req.body as { id: number; quantity: number };
+
+  const produto = await prisma.produto.update({
+    where: {
+      id: id,
+    },
+    data: {
+      quantity: {
+        increment: quantity,
+      },
+    },
+  });
+
+  res.status(200).send(produto);
+};
+
+//diminuir quantidade por id
+
+export const minusItemById = async (req: FastifyRequest, res: FastifyReply) => {
+  const { id, quantity } = req.body as { id: number; quantity: number };
+
+  const produto = await prisma.produto.update({
+    where: {
+      id: id,
+    },
+    data: {
+      quantity: {
+        decrement: quantity,
+      },
+    },
+  });
+
+  res.status(200).send(produto);
+};
