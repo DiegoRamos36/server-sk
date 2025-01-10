@@ -46,3 +46,9 @@ export const deleteBranch = async (req: FastifyRequest, res: FastifyReply) => {
       );
   }
 };
+
+export const allBranches = async (req: FastifyRequest, res: FastifyReply) => {
+  const branches = await prisma.filial.findMany();
+
+  res.status(200).send(branches);
+};
