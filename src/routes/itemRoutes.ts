@@ -10,7 +10,7 @@ import {
 
 export const ItemRoutes: FastifyPluginCallback = (app, options, done) => {
   app.post('/novo-item', newItem);
-  app.get('/obter-item', getAllItems);
+  app.post('/obter-item', getAllItems);
   app.post('/obter-item-name', getItemByName);
   app.post('/delete-item', deleteItemById);
   app.post('/plus-item', plusItemById);
