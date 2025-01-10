@@ -6,6 +6,7 @@ export const productSchema = z.object({
   quantity: z.number().positive(),
   sentBy: z.string(),
   expires: z.string(),
-  localImg: z.string(),
+  imagemUrl: z.string(),
+  categoria: z.string(),
   localDesc: z.string(),
 });

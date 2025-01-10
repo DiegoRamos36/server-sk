@@ -6,18 +6,39 @@ import { compare, hash } from 'bcrypt';
 const prisma = new PrismaClient();
 
 export const newEmployee = async (req: FastifyRequest, res: FastifyReply) => {
-  const data = employeesSchema.parse(req.body);
+  const { nome, username, password, role, filialId } = req.body as {
+    nome: string;
+    username: string;
+    password: string;
+    role: string;
+    filialId: number;
+  };
+  try {
+    const filial = await prisma.filial.findUnique({
+      where: { id: filialId },
+    });
 
-  const funcionario = await prisma.funcionarios.create({
-    data: {
-      nome: data.nome,
-      username: data.username,
-      password: await hash(data.password, 10),
-      endereco: data.endereco,
-      cargo: data.cargo,
-    },
-  });
-  return res.status(201).send({ employeeName: funcionario.nome });
+    if (!filial) {
+      return res.status(404).send({ error: 'Filial not found' });
+    }
+
+    const funcionario = await prisma.funcionarios.create({
+      data: {
+        nome: nome,
+        username: username,
+        password: await hash(password, 10),
+        role: role,
+        filialId: filial.id,
+      },
+    });
+    return res.status(201).send({ employeeName: funcionario.nome });
+  } catch (e) {
+    return res
+      .status(400)
+      .send(
+        `Um erro ocorreu: ${e instanceof Error ? e.message : 'Desconhecido'}`,
+      );
+  }
 };
 
 export const authEmployee = async (req: FastifyRequest, res: FastifyReply) => {
@@ -51,7 +72,8 @@ export const authEmployee = async (req: FastifyRequest, res: FastifyReply) => {
   const token = await res.jwtSign({
     id: user.id,
     name: user.nome,
-    cargo: user.cargo,
+    role: user.role,
+    filial: user.filialId,
   });
   if (!token) return res.status(400).send('Erro na geração do token');
 
@@ -63,9 +85,9 @@ export const getEmployees = async (req: FastifyRequest, res: FastifyReply) => {
     select: {
       id: true,
       username: true,
-      cargo: true,
-      endereco: true,
+      role: true,
       nome: true,
+      filialId: true,
     },
   });
   return res.status(200).send(funcionarios);
@@ -85,9 +107,9 @@ export const getEmployeeByName = async (
     },
     select: {
       id: true,
-      cargo: true,
-      endereco: true,
+      role: true,
       nome: true,
+      filialId: true,
     },
   });
 

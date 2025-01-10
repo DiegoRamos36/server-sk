@@ -5,6 +5,7 @@ import { authCors } from './utilities/authCors';
 import fastifyJwt from '@fastify/jwt';
 import dotenv from 'dotenv';
 import { EmployeeRoutes } from './routes/employeeRoutes';
+import { BranchRoutes } from './routes/branchRoutes';
 
 dotenv.config();
 const port = process.env.PORT || 4000;
@@ -19,6 +20,8 @@ app.register(fastifyJwt, {
 
 app.register(ItemRoutes);
 app.register(EmployeeRoutes);
+app.register(BranchRoutes);
+
 app.register(fastifyCors, authCors);
 
 app.listen(port, '0.0.0.0', () => {

@@ -1,0 +1,9 @@
+POST http://localhost:4000/autenticar-funcionario
+Content-Type: 'application/json'
+
+
+{
+
+  "username":"diegoadm",
+  "password" : "9350369"
+}

@@ -10,26 +10,46 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-
-model Produto {
-  id            Int             @id @default(autoincrement())
-  name String
-  createdAt     String        
-  quantity Int
-  expires String
-  sentBy String
-  localImg String
-  localDesc String
+model Filial {
+  id        Int         @id @default(autoincrement())
+  nome      String @unique
+  endereco  String
+  createdAt DateTime       @default(now())
+  usuarios  Funcionarios[]
+  estoque   Estoque[]
 }
 
-
-
-
 model Funcionarios {
-  id Int @id @default(autoincrement())
-  nome String
-  username String @unique
-  password String
-  cargo String 
-  endereco String
+  id        Int      @id @default(autoincrement())
+  nome      String
+  username  String   @unique
+  password  String
+  role      String
+  filialId  Int
+  filial    Filial   @relation(fields: [filialId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Produto {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  quantity  Int
+  categoria String
+  expires   String
+  sentBy    String
+  imagemUrl String
+  localDesc String
+  estoques  Estoque[]
+}
+
+model Estoque {
+  id         Int   @id @default(autoincrement())
+  produtoId  Int
+  filialId   Int
+  quantidade Int
+  produto    Produto  @relation(fields: [produtoId], references: [id])
+  filial     Filial   @relation(fields: [filialId], references: [id])
+  updatedAt  DateTime @updatedAt
 }
