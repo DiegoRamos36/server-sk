@@ -46,6 +46,27 @@ export const deleteBranch = async (req: FastifyRequest, res: FastifyReply) => {
       );
   }
 };
+export const branchById = async (req: FastifyRequest, res: FastifyReply) => {
+  const { id } = req.body as { id: number };
+  try {
+    if (!id || id === 0) throw new Error('Preencha todos os campos!');
+
+    const branch = await prisma.filial.findFirst({
+      where: {
+        id: id,
+      },
+    });
+    return res.status(201).send(branch);
+  } catch (error) {
+    return res
+      .status(400)
+      .send(
+        `Um erro ocorreu: ${
+          error instanceof Error ? error.message : 'Desconhecido'
+        }`,
+      );
+  }
+};
 
 export const allBranches = async (req: FastifyRequest, res: FastifyReply) => {
   const branches = await prisma.filial.findMany();
