@@ -6,8 +6,8 @@ import { compare, hash } from 'bcrypt';
 const prisma = new PrismaClient();
 
 export const newEmployee = async (req: FastifyRequest, res: FastifyReply) => {
-  const { nome, username, password, role, filialId } = req.body as {
-    nome: string;
+  const { name, username, password, role, filialId } = req.body as {
+    name: string;
     username: string;
     password: string;
     role: string;
@@ -24,14 +24,14 @@ export const newEmployee = async (req: FastifyRequest, res: FastifyReply) => {
 
     const funcionario = await prisma.funcionarios.create({
       data: {
-        nome: nome,
+        name: name,
         username: username,
         password: await hash(password, 10),
         role: role,
         filialId: filial.id,
       },
     });
-    return res.status(201).send({ employeeName: funcionario.nome });
+    return res.status(201).send({ employeeName: funcionario.name });
   } catch (e) {
     return res
       .status(400)
@@ -71,7 +71,7 @@ export const authEmployee = async (req: FastifyRequest, res: FastifyReply) => {
 
   const token = await res.jwtSign({
     id: user.id,
-    name: user.nome,
+    name: user.name,
     role: user.role,
     filial: user.filialId,
   });
@@ -86,7 +86,7 @@ export const getEmployees = async (req: FastifyRequest, res: FastifyReply) => {
       id: true,
       username: true,
       role: true,
-      nome: true,
+      name: true,
       filialId: true,
     },
   });
@@ -97,18 +97,18 @@ export const getEmployeeByName = async (
   req: FastifyRequest,
   res: FastifyReply,
 ) => {
-  const { nome } = req.body as { nome: string };
+  const { name } = req.body as { name: string };
 
   const employee = await prisma.funcionarios.findFirst({
     where: {
-      nome: {
-        contains: nome,
+      name: {
+        contains: name,
       },
     },
     select: {
       id: true,
       role: true,
-      nome: true,
+      name: true,
       filialId: true,
     },
   });
@@ -130,7 +130,7 @@ export const deleteEmployeeById = async (
         id: id,
       },
     });
-    return res.status(200).send(deleteEmployee.nome + ' excluído com sucesso!');
+    return res.status(200).send(deleteEmployee.name + ' excluído com sucesso!');
   } catch (e) {
     return res
       .status(400)

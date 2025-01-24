@@ -1,7 +1,8 @@
-POST http://localhost:4000/ver-filial
+POST https://server-sk-53rm.onrender.com/obter-item-name
 Content-Type: 'application/json'
 
 
 {
-  "id" : 0
+"name" : "Queijo",
+"filialId" : 1
 }

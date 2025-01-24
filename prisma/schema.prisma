@@ -21,7 +21,7 @@ model Filial {
 
 model Funcionarios {
   id        Int      @id @default(autoincrement())
-  nome      String
+  name      String @default("Administrador")
   username  String   @unique
   password  String
   role      String
