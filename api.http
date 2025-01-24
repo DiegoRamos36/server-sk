@@ -1,8 +1,7 @@
-POST https://server-sk-53rm.onrender.com/obter-item-name
+POST https://server-sk-53rm.onrender.com/ver-filial-id
 Content-Type: 'application/json'
 
 
 {
-"name" : "Queijo",
-"filialId" : 1
+"id": "1"
 }
