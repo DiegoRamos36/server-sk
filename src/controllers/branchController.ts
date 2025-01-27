@@ -4,14 +4,19 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 const prisma = new PrismaClient();
 
 export const newBranch = async (req: FastifyRequest, res: FastifyReply) => {
-  const { nome, endereco } = req.body as { nome: string; endereco: string };
+  const { nome, endereco, id } = req.body as {
+    nome: string;
+    endereco: string;
+    id: number;
+  };
   try {
-    if (!nome || !endereco) throw new Error('Preencha todos os campos!');
+    if (!nome || !endereco || !id) throw new Error('Preencha todos os campos!');
 
     const branch = await prisma.filial.create({
       data: {
         nome: nome,
         endereco: endereco,
+        id: id,
       },
     });
 

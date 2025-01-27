@@ -1,7 +1,0 @@
-POST https://server-sk-53rm.onrender.com/ver-filial-id
-Content-Type: 'application/json'
-
-
-{
-"id": "1"
-}
