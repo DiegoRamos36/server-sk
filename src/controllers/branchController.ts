@@ -74,7 +74,11 @@ export const branchById = async (req: FastifyRequest, res: FastifyReply) => {
 };
 
 export const allBranches = async (req: FastifyRequest, res: FastifyReply) => {
-  const branches = await prisma.filial.findMany();
+  const branches = await prisma.filial.findMany({
+    include: {
+      usuarios: true,
+    },
+  });
 
   res.status(200).send(branches);
 };
