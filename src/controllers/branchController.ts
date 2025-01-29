@@ -76,7 +76,15 @@ export const branchById = async (req: FastifyRequest, res: FastifyReply) => {
 export const allBranches = async (req: FastifyRequest, res: FastifyReply) => {
   const branches = await prisma.filial.findMany({
     include: {
-      usuarios: true,
+      usuarios: {
+        select: {
+          id: true,
+          role: true,
+          name: true,
+          filialId: true,
+          createdAt: true,
+        },
+      },
     },
   });
 
