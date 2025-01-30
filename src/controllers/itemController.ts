@@ -114,12 +114,6 @@ export const deleteItemById = async (
       produtoId: Number(id),
     },
   });
-
-  const produto = await prisma.produto.delete({
-    where: {
-      id: parseInt(id),
-    },
-  });
 };
 
 export const plusItemById = async (req: FastifyRequest, res: FastifyReply) => {
