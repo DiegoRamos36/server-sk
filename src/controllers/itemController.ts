@@ -38,7 +38,6 @@ export const newItem = async (req: FastifyRequest, res: FastifyReply) => {
   return res.status(201).send({ itemId: item.id, itemName: item.name });
 };
 
-// ver todos os itens da fillial
 export const getAllItems = async (req: FastifyRequest, res: FastifyReply) => {
   const { filialId } = req.body as { filialId: number };
 
@@ -76,7 +75,6 @@ export const getItemByName = async (req: FastifyRequest, res: FastifyReply) => {
         .send({ error: 'Nome e ID da filial são obrigatórios' });
     }
 
-    // Buscar o item pelo nome e pela filialId no estoque
     const item = await prisma.estoque.findFirst({
       where: {
         produto: {
@@ -110,7 +108,14 @@ export const deleteItemById = async (
   res: FastifyReply,
 ) => {
   const { id } = req.body as { id: string };
-  const deletarItem = await prisma.produto.delete({
+
+  const estoque = await prisma.estoque.deleteMany({
+    where: {
+      produtoId: Number(id),
+    },
+  });
+
+  const produto = await prisma.produto.delete({
     where: {
       id: parseInt(id),
     },

@@ -1,1 +1,6 @@
-GET https://server-sk-53rm.onrender.com/ver-filial
+POST https://server-sk-53rm.onrender.com/delete-item
+Content-Type: application/json
+
+{
+  "id": 2
+}
